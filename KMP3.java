@@ -41,7 +41,7 @@ public class KMP {
 
     }
     // konstruktor dla urzytku gui
-    public KMP(String text, String fraza, int policz, ArrayList<Integer> indexy) {
+    public KMP(String text, String fraza, int policz, int nrlin, ArrayList<Index> indexy) {
 
         nie_pasujace = new int[fraza.length()];
 
@@ -51,7 +51,8 @@ public class KMP {
 
         if (ind == -1) {
         } else {
-            indexy.add(ind);  
+                    Index indy = new Index(nrlin,ind);
+            indexy.add(indy);  
         }
     }
 
@@ -132,18 +133,21 @@ public class KMP {
         }
     }
     
-       public static void wyszukaj(ArrayList<Integer> indexy, String text, String fraza ) throws IOException {
-
+       public static void wyszukaj(ArrayList<Index> indexy, String text, String fraza ) throws IOException {
+           int linia = 0;
         BufferedReader in = new BufferedReader(new FileReader(new File(text)));
         for (String line = in.readLine(); line != null; line = in.readLine()) {
-            KMP kmp = new KMP(line, fraza, licz, indexy);
+            KMP kmp = new KMP(line, fraza, licz, linia, indexy);
+            linia++;
         }
        
     }
 
 // przykładowe wywołanie wyszukiwania
     public static void main(String[] args) throws IOException {
-        ArrayList<Integer> ind = new ArrayList<>();
+        ArrayList<Index> ind = new ArrayList<>();
+        int l;
+        int i;
         Scanner br = new Scanner(System.in);
         System.out.println("Wyszukiwanie algorytmem Knuth Morris Pratt \n");
 
@@ -158,7 +162,14 @@ public class KMP {
         if( ind.isEmpty() == true){
             System.out.println("Nie odnaleziono");
         }else{
-        System.out.println("Fraza naleziona pod indeksem/ami: " + ind.toString());     
+            System.out.println("Fraza naleziona pod indeksem/ami: ");
+            int size = ind.size();
+            for (int a = 0;a < size; a++ ){
+               l=ind.get(a).getLinia();
+               i = ind.get(a).getIndex();
+               System.out.println( "linia: " + l + " index: " + i + "\n");
+            }
+             
         }
         
     }
